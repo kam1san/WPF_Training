@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data;
 
 namespace WPF_Training_App
 {
@@ -23,6 +24,29 @@ namespace WPF_Training_App
         public MainWindow()
         {
             InitializeComponent();
+
+            foreach(UIElement el in MainGrid.Children)
+            {
+                if(el is Button)
+                {
+                    ((Button) el).Click += Button_Click;
+                }
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string str = (String)((Button)e.OriginalSource).Content;
+
+            if (str == "AC")
+                label_text.Text = "";
+            else if(str == "=")
+            {
+                string value = new DataTable().Compute(label_text.Text, null).ToString();
+                label_text.Text = value;
+            }
+            else
+                label_text.Text += str;
         }
     }
 }
