@@ -15,14 +15,14 @@ using System.Windows.Shapes;
 
 namespace UsersDesktopApp
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        AppContext db;
+
         public MainWindow()
         {
             InitializeComponent();
+            db = new AppContext();
         }
 
         private void SignUp_Click(object sender, RoutedEventArgs e)
@@ -45,7 +45,7 @@ namespace UsersDesktopApp
             }
             else
             {
-                login.ToolTip = "";
+                login.ToolTip = null;
                 login.Background = Brushes.Transparent;
                 login_check = true;
             }
@@ -61,9 +61,9 @@ namespace UsersDesktopApp
             }
             else
             {
-                password.ToolTip = "";
+                password.ToolTip = null;
                 password.Background = Brushes.Transparent;
-                password_repeat.ToolTip = "";
+                password_repeat.ToolTip = null;
                 password_repeat.Background = Brushes.Transparent;
                 pass_check = true;
                 pass_rep_check = true;
@@ -77,7 +77,7 @@ namespace UsersDesktopApp
             }
             else
             {
-                password.ToolTip = "";
+                password.ToolTip = null;
                 password.Background = Brushes.Transparent;
                 pass_check = true;
             }
@@ -90,29 +90,36 @@ namespace UsersDesktopApp
             }
             else
             {
-                email.ToolTip = "";
+                email.ToolTip = null;
                 email.Background = Brushes.Transparent;
                 email_check = true;
             }
 
             if(login_check && pass_check && pass_rep_check && email_check)
             {
-                login.ToolTip = "";
+                login.ToolTip = null;
                 login.Background = Brushes.Transparent;
-                password.ToolTip = "";
+                password.ToolTip = null;
                 password.Background = Brushes.Transparent;
-                password_repeat.ToolTip = "";
+                password_repeat.ToolTip = null;
                 password_repeat.Background = Brushes.Transparent;
-                email.ToolTip = "";
+                email.ToolTip = null;
                 email.Background = Brushes.Transparent;
+                
+                db.Users.Add(new User(log, pass, mail));
+                db.SaveChanges();
 
-                MessageBox.Show("Registartion Successful!");
-
-                login.Text = "";
-                password.Password = "";
-                password_repeat.Password = "";
-                email.Text = "";
+                AuthWindow auth = new AuthWindow();
+                auth.Show();
+                this.Hide();
             }
+        }
+
+        private void LogIn_Click(object sender, RoutedEventArgs e)
+        {
+            AuthWindow auth = new AuthWindow();
+            auth.Show();
+            this.Hide();
         }
     }
 }
